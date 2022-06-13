@@ -7,32 +7,43 @@ import {
   Text,
   View,
 } from "react-native";
+import { TouchableWithoutFeedback } from "react-native-web";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const BUSSTOP_URL = "https://arrivelah2.busrouter.sg/?id=83139"
-  
+  const [arrival, setArrival] = useState("");
+  const BUSSTOP_URL = "https://arrivelah2.busrouter.sg/?id=83139";
+
   function loadBusStopData() {
     fetch(BUSSTOP_URL)
       .then((response) => {
         return response.json();
       })
       .then((responseData) => {
+        console.log("Original data: ");
         console.log(responseData);
+        const myBus = responseData.services.filter(
+          (item) => item.no ==="155"
+        )[0];
+        console.log("My bus: ");
+        console.log(myBus.next.time);
+        setArrival(myBus.next.time);
+        console.log(myBus);
+        setLoading(false);
       });
   }
 
   useEffect(() => {
-    loadBusStopData();
-  }, []);
-
+    const interval = setInterval(loadBusStopData, 5000);
+    return () => clearInterval(interval);
+    }, []);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}> Bus arrival time: </Text>
       <Text style={styles.arrivalTime}>
         {" "}
-        {loading ? <ActivityIndicator color={"blue"} /> : "Loaded"}
+        {loading ? <ActivityIndicator color="blue" size="large"/> : arrival}
       </Text>
       <TouchableOpacity style={styles.button} onPress={() => setLoading(true)}>
         <Text style={styles.buttonText}> Refresh </Text>
@@ -49,16 +60,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     fontSize: 100,
   },
-  text: {
+  title: {
     fontSize: 50,
     marginVertical: 20,
   },
   button: {
-    backgroundColor: "#bbf",
+    backgroundColor: "green",
     padding: 20,
     marginVertical: 20,
   },
   buttonText: {
+    color: "white",
     fontSize: 20,
   },
 });
