@@ -55,7 +55,7 @@ function DetailsScreen() {
         // console.log("My bus: ");
         // console.log(myBus.next.time);
         setBusNo(myBus.no);
-        setBusStopNo(myBus.next.stopNo);
+        // setBusStopNo(myBus.next.stopNo);
         const duration_ms=myBus.next.duration_ms;
         console.log(duration_ms);
         const duration_mins= Math.floor(duration_ms/60/1000);
@@ -77,6 +77,12 @@ function DetailsScreen() {
         {" "}
         {loading ? <ActivityIndicator color="blue" size="large"/> : busNo}
       </Text>
+      <Text style={styles.title}> Bus Stop No: </Text>
+      <Text style={styles.subtitle}>
+        {" "}
+        {loading ? <ActivityIndicator color="blue" size="large"/> : busNo}
+      </Text>
+      
       <Text style={styles.title}> Bus arrival time: </Text>
       <Text style={styles.subtitle}>
         {" "}
